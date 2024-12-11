@@ -58,3 +58,13 @@ export const findUserByEmail = async (email) => {
     throw new Error();
   }
 };
+
+// 비밀번호 검증
+export const comparePassword = async (userPassword, dbPassword) => {
+  try {
+    const result = await bcrypt.compare(userPassword, dbPassword);
+    return result;
+  } catch (err) {
+    throw new Error();
+  }
+};
