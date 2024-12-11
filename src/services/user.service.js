@@ -47,3 +47,14 @@ export const insertUserData = async (email, password, nickname) => {
     throw new Error();
   }
 };
+
+// 유저 데이터 조회
+export const findUserByEmail = async (email) => {
+  try {
+    const sql = `SELECT email, password FROM users WHERE email = ?`;
+    const [user] = await db.execute(sql, [email]);
+    return user[0];
+  } catch (err) {
+    throw new Error();
+  }
+};
