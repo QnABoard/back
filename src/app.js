@@ -5,9 +5,10 @@ import userRouter from "./routes/user.routes.js";
 
 const app = express();
 app.use(express.json());
-app.use(errorHandler);
 
 app.use("/api/users", userRouter);
+
+app.use(errorHandler);
 
 const PORT_NUMBER = process.env.PORT_NUMBER;
 app.listen(PORT_NUMBER, () => {
