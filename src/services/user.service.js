@@ -35,3 +35,15 @@ export const hashPassword = async (password) => {
     throw new Error();
   }
 };
+
+// 유저 데이터 저장
+export const insertUserData = async (email, password, nickname) => {
+  try {
+    const sql = `INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)`;
+    const values = [email, password, nickname];
+
+    await db.execute(sql, values);
+  } catch (err) {
+    throw new Error();
+  }
+};
