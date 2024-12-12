@@ -11,7 +11,7 @@ import {
 import { validateRequireField } from "../utils/validate.js";
 
 // 회원가입
-export const registerUser = async (req, res, next) => {
+const registerUser = async (req, res, next) => {
   const { email, password, nickname } = req.body;
 
   try {
@@ -24,7 +24,7 @@ export const registerUser = async (req, res, next) => {
     const isDuplicateEmail = await checkEmailExists(email);
     if (isDuplicateEmail) {
       const error = new Error("중복된 이메일입니다.");
-      error.statusCode = 400;
+      error.statusCode = 409;
       throw error;
     }
 
@@ -32,7 +32,7 @@ export const registerUser = async (req, res, next) => {
     const isDuplicateNickname = await checkNicknameExists(nickname);
     if (isDuplicateNickname) {
       const error = new Error("중복된 닉네임 입니다.");
-      error.statusCode = 400;
+      error.statusCode = 409;
       throw error;
     }
 
@@ -49,7 +49,7 @@ export const registerUser = async (req, res, next) => {
 };
 
 // 로그인
-export const loginUser = async (req, res, next) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     // 입력값이 유효한지 확인
@@ -61,7 +61,7 @@ export const loginUser = async (req, res, next) => {
     // 없을 시 예외처리
     if (!user) {
       const error = new Error("등록되지 않은 이메일입니다.");
-      error.statusCode = 400;
+      error.statusCode = 404;
       throw error;
     }
 
@@ -70,7 +70,7 @@ export const loginUser = async (req, res, next) => {
     // 비밀번호 틀렸을 시 예외처리
     if (!passwordVerify) {
       const error = new Error("비밀번호가 틀렸습니다.");
-      error.statusCode = 400;
+      error.statusCode = 401;
       throw error;
     }
 
@@ -83,3 +83,5 @@ export const loginUser = async (req, res, next) => {
     next(err);
   }
 };
+
+export default { registerUser, loginUser };
