@@ -11,7 +11,7 @@ import {
 import { validateRequireField } from "../utils/validate.js";
 
 // 회원가입
-export const registerUser = async (req, res, next) => {
+const registerUser = async (req, res, next) => {
   const { email, password, nickname } = req.body;
 
   try {
@@ -49,7 +49,7 @@ export const registerUser = async (req, res, next) => {
 };
 
 // 로그인
-export const loginUser = async (req, res, next) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     // 입력값이 유효한지 확인
@@ -83,3 +83,5 @@ export const loginUser = async (req, res, next) => {
     next(err);
   }
 };
+
+export default { registerUser, loginUser };
