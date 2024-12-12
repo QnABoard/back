@@ -6,16 +6,14 @@ import jwt from "jsonwebtoken";
 export const checkEmailExists = async (email) => {
   const sql = `SELECT 1 FROM users WHERE email = ?`;
   const [exist] = await db.execute(sql, [email]);
-  if (exist[0]) return true;
-  else return false;
+  return !!exist[0];
 };
 
 // 닉네임 중복 확인
 export const checkNicknameExists = async (nickname) => {
   const sql = `SELECT 1 FROM users WHERE nickname = ?`;
   const [exist] = await db.execute(sql, [nickname]);
-  if (exist[0]) return true;
-  else return false;
+  return !!exist[0];
 };
 
 // 비밀번호 암호화
