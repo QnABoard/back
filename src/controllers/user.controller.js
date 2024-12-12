@@ -24,7 +24,7 @@ const registerUser = async (req, res, next) => {
     const isDuplicateEmail = await checkEmailExists(email);
     if (isDuplicateEmail) {
       const error = new Error("중복된 이메일입니다.");
-      error.statusCode = 400;
+      error.statusCode = 409;
       throw error;
     }
 
@@ -32,7 +32,7 @@ const registerUser = async (req, res, next) => {
     const isDuplicateNickname = await checkNicknameExists(nickname);
     if (isDuplicateNickname) {
       const error = new Error("중복된 닉네임 입니다.");
-      error.statusCode = 400;
+      error.statusCode = 409;
       throw error;
     }
 
