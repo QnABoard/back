@@ -61,7 +61,7 @@ const loginUser = async (req, res, next) => {
     // 없을 시 예외처리
     if (!user) {
       const error = new Error("등록되지 않은 이메일입니다.");
-      error.statusCode = 400;
+      error.statusCode = 404;
       throw error;
     }
 
@@ -70,7 +70,7 @@ const loginUser = async (req, res, next) => {
     // 비밀번호 틀렸을 시 예외처리
     if (!passwordVerify) {
       const error = new Error("비밀번호가 틀렸습니다.");
-      error.statusCode = 400;
+      error.statusCode = 401;
       throw error;
     }
 
