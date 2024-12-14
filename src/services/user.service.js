@@ -44,8 +44,8 @@ export const comparePassword = async (userPassword, dbPassword) => {
 };
 
 // JWT 토큰 생성
-export const makeToken = async (email, nickname) => {
-  const token = jwt.sign({ email, nickname }, process.env.JWT_SECRET, {
+export const makeToken = async (email, nickname, role) => {
+  const token = jwt.sign({ email, nickname, role }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
   return token;
