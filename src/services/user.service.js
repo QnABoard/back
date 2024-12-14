@@ -32,7 +32,7 @@ export const insertUserData = async (email, password, nickname) => {
 
 // 유저 데이터 조회
 export const findUserByEmail = async (email) => {
-  const sql = `SELECT email, nickname ,password FROM users WHERE email = ?`;
+  const sql = `SELECT email, nickname ,password, role FROM users WHERE email = ?`;
   const [user] = await db.execute(sql, [email]);
   return user[0];
 };
