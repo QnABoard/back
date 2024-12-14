@@ -21,6 +21,7 @@ app.use(cors(corsOptions)); // CORS 미들웨어 적용
 // 라우터 설정
 app.use("/api/users", userRouter);
 app.use("/api/main", mainRouter);
+app.use("/api/posts", postRouter);
 
 // 에러 핸들러
 app.use(errorHandler);
