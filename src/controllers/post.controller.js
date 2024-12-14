@@ -12,7 +12,6 @@ const getPostById = async (req, res, next) => {
   // 사용자의 스크랩, 좋아요 여부
   const { id } = req.params;
   try {
-    console.log(authHeader);
     const post = await getPostDataById(id);
     if (!post.length) {
       const error = new Error("게시글이 존재하지 않습니다.");
