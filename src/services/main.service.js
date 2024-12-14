@@ -25,3 +25,10 @@ export const getTokenData = async (authHeader) => {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   return decoded;
 };
+
+// 메인 화면 유저정보
+export const getUserMainData = async (email) => {
+  const sql = `SELECT nickname, icon FROM users WHERE email = ?`;
+  const [user] = await db.execute(sql, [email]);
+  return user[0];
+};
