@@ -7,11 +7,20 @@ import mainRouter from "./routes/main.routes.js";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 
+// CORS 설정
+const corsOptions = {
+  origin: process.env.CLIENT_URL, // 허용할 클라이언트 URL
+  methods: ["GET", "POST", "PUT", "DELETE"], // 허용할 HTTP 메서드
+  credentials: true, // 쿠키 전송 허용
+};
+app.use(cors(corsOptions)); // CORS 미들웨어 적용
+
+// 라우터 설정
 app.use("/api/users", userRouter);
 app.use("/api/main", mainRouter);
 
+// 에러 핸들러
 app.use(errorHandler);
 
 const PORT_NUMBER = process.env.PORT_NUMBER;
