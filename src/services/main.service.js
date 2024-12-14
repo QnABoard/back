@@ -1,4 +1,5 @@
 import db from "../db/server.js";
+import jwt from "jsonwebtoken";
 
 // 메인 화면 게시글 정보
 export const getPostsData = async () => {
@@ -16,4 +17,11 @@ export const getPostsData = async () => {
   const [posts] = await db.execute(sql);
 
   return posts;
+};
+
+// 유저 토큰 정보
+export const getTokenData = async (authHeader) => {
+  const token = authHeader.split(" ")[1]; // Bearer <token>
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  return decoded;
 };
