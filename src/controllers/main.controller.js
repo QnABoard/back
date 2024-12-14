@@ -1,9 +1,10 @@
 import {
   getPostsData,
-  getTokenData,
   getUserMainData,
   getTags,
 } from "../services/main.service.js";
+
+import { getTokenData } from "../utils/getTokenData.js";
 
 // 메인 화면
 const getMain = async (req, res, next) => {

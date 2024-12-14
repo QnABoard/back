@@ -19,13 +19,6 @@ export const getPostsData = async () => {
   return posts;
 };
 
-// 유저 토큰 정보
-export const getTokenData = async (authHeader) => {
-  const token = authHeader.split(" ")[1]; // Bearer <token>
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  return decoded;
-};
-
 // 메인 화면 유저정보
 export const getUserMainData = async (email) => {
   const sql = `SELECT nickname, icon FROM users WHERE email = ?`;
