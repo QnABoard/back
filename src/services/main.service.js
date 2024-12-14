@@ -1,4 +1,5 @@
 import db from "../db/server.js";
+import jwt from "jsonwebtoken";
 
 // 메인 화면 게시글 정보
 export const getPostsData = async () => {
@@ -16,4 +17,19 @@ export const getPostsData = async () => {
   const [posts] = await db.execute(sql);
 
   return posts;
+};
+
+// 메인 화면 유저정보
+export const getUserMainData = async (email) => {
+  const sql = `SELECT nickname, icon FROM users WHERE email = ?`;
+  const [user] = await db.execute(sql, [email]);
+  return user[0];
+};
+
+// 메인 화면 태그정보
+export const getTags = async () => {
+  const sql = `SELECT name FROM tags`;
+  let [tags] = await db.execute(sql);
+  tags = tags.map((tag) => tag.name);
+  return tags;
 };

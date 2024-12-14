@@ -42,7 +42,7 @@ const registerUser = async (req, res, next) => {
     // DB에 유저 정보 저장
     insertUserData(email, hashedPassword, nickname);
 
-    res.json({ success: true });
+    res.status(201).json({ success: true });
   } catch (err) {
     next(err);
   }
@@ -75,7 +75,7 @@ const loginUser = async (req, res, next) => {
     }
 
     // JWT 토큰 생성
-    const token = await makeToken(user.email, user.nickname);
+    const token = await makeToken(user.email, user.nickname, user.role);
 
     // 응답 데이터
     res.json({ success: true, token });
