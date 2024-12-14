@@ -4,6 +4,7 @@ import cors from "cors";
 import errorHandler from "./middlewares/errorHandler.js";
 import userRouter from "./routes/user.routes.js";
 import mainRouter from "./routes/main.routes.js";
+import postRouter from "./routes/post.routes.js";
 
 const app = express();
 app.use(express.json());
@@ -12,6 +13,7 @@ app.use(express.json());
 const corsOptions = {
   origin: process.env.CLIENT_URL, // 허용할 클라이언트 URL
   methods: ["GET", "POST", "PUT", "DELETE"], // 허용할 HTTP 메서드
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // 쿠키 전송 허용
 };
 app.use(cors(corsOptions)); // CORS 미들웨어 적용
