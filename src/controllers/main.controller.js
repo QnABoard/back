@@ -2,6 +2,7 @@ import {
   getPostsData,
   getTokenData,
   getUserMainData,
+  getTags,
 } from "../services/main.service.js";
 
 // 메인 화면
@@ -18,9 +19,14 @@ const getMain = async (req, res, next) => {
     // 메인 화면 유저 데이터, 토큰 없을 시 null
     user = user || null;
 
+    // 메인 화면 태그 데이터
+    const tags = await getTags();
+
     // 메인 화면 게시글 데이터
     const posts = await getPostsData();
-    res.json({ user, posts });
+
+    // 응답
+    res.status(200).json({ user, tags, posts });
   } catch (err) {
     next(err);
   }
