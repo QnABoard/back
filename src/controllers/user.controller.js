@@ -42,7 +42,7 @@ const registerUser = async (req, res, next) => {
     // DB에 유저 정보 저장
     insertUserData(email, hashedPassword, nickname);
 
-    res.json({ success: true });
+    res.status(201).json({ success: true });
   } catch (err) {
     next(err);
   }
