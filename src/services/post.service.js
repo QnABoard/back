@@ -70,3 +70,23 @@ export const addTagsData = async (id, tags) => {
 `;
   await db.execute(sql, [id, ...tags]);
 };
+
+// 게시글 제목, 내용 수정
+export const ModifyTitleAndContent = async (id, title, content) => {
+  const modifyList = [];
+  const values = [];
+
+  // 전달된 값에 따라 쿼리문 변경
+  if (title) {
+    modifyList.push("title = ?");
+    values.push(title);
+  }
+  if (content) {
+    modifyList.push("content = ?");
+    values.push(content);
+  }
+  values.push(id);
+
+  const sql = `UPDATE posts SET ${modifyList.join(", ")} WHERE id = ?`;
+  await db.execute(sql, values);
+};
