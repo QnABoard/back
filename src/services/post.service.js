@@ -58,3 +58,15 @@ export const addPostData = async (id, title, content) => {
   // 저장된 게시글의 id 리턴
   return result.insertId;
 };
+
+// 게시글 태그 정보 저장
+export const addTagsData = async (id, tags) => {
+  let placeholder = Array.from({ length: tags.length }, () => "?").join(",");
+  const sql = `
+  INSERT INTO post_tags (post_id, tag_id)
+  SELECT ?, t.id 
+  FROM tags t 
+  WHERE t.name IN (${placeholder})
+`;
+  await db.execute(sql, [id, ...tags]);
+};
