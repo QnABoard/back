@@ -3,9 +3,12 @@ import {
   getCommentDataById,
   getLikeAndScrapStatus,
   addViewCount,
+  addPostData,
+  addTagsData,
 } from "../services/post.service.js";
 
 import { getTokenData } from "../utils/getTokenData.js";
+import { validateRequireField } from "../utils/validate.js";
 
 // 게시글 조회
 const getPostById = async (req, res, next) => {
@@ -40,4 +43,27 @@ const getPostById = async (req, res, next) => {
   }
 };
 
-export default { getPostById };
+// 게시글 등록
+const creatPost = async (req, res, next) => {
+  const userId = req.user.id;
+  const { title, tags, content } = req.body;
+  try {
+    // 입력값 유효성 검사
+    validateRequireField(title, "제목");
+    validateRequireField(tags, "태그");
+    validateRequireField(content, "내용");
+
+    // DB에 게시글 정보 저장 후 리턴값으로 게시글 id 받아오기
+    const postId = await addPostData(userId, title, content);
+
+    // 게시글 태그 정보 저장
+    await addTagsData(postId, tags);
+
+    // 응답
+    res.status(201).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { getPostById, creatPost };
