@@ -98,3 +98,13 @@ export const ModifyTitleAndContent = async (id, title, content) => {
   const sql = `UPDATE posts SET ${modifyList.join(", ")} WHERE id = ?`;
   await db.execute(sql, values);
 };
+
+// 게시글 태그 수정
+export const modifyTags = async (id, tags) => {
+  // 태그 데이터 전부 삭제
+  const sql = `DELETE FROM post_tags WHERE post_id = ?`;
+  await db.execute(sql, [id]);
+
+  // 태그 데이터 재등록
+  await addTagsData(id, tags);
+};
