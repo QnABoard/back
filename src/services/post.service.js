@@ -1,4 +1,5 @@
 import db from "../db/server.js";
+import { validateRequireField } from "../utils/validate.js";
 
 // 게시글 관련 데이터 조회
 export const getPostDataById = async (id) => {
@@ -33,15 +34,80 @@ export const getCommentDataById = async (id) => {
 };
 
 // 좋아요 스크랩 여부 조회
-export const getLikeAndScrapStatus = async (email, postId) => {
-  let sql = `SELECT id FROM users WHERE email = ?`;
-  const [result] = await db.execute(sql, [email]);
-  const userId = result[0].id;
-
-  sql = `SELECT 
+export const getLikeAndScrapStatus = async (userId, postId) => {
+  const sql = `SELECT 
   EXISTS(SELECT 1 FROM scraps WHERE user_id = ? AND post_id = ?) AS scrapped,
   EXISTS(SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?) AS liked`;
 
   const [status] = await db.execute(sql, [userId, postId, userId, postId]);
   return status;
+};
+
+// 조회수 증가
+export const addViewCount = async (id) => {
+  const sql = `UPDATE posts SET view = view + 1 WHERE id = ?`;
+  await db.execute(sql, [id]);
+};
+
+// 게시글 정보 저장
+export const addPostData = async (id, title, content) => {
+  const sql = `INSERT INTO posts (user_id, title, content) VALUES (?, ?, ?)`;
+  const values = [id, title, content];
+
+  const [result] = await db.execute(sql, values);
+  // 저장된 게시글의 id 리턴
+  return result.insertId;
+};
+
+// 게시글 태그 정보 저장
+export const addTagsData = async (id, tags) => {
+  let placeholder = Array.from({ length: tags.length }, () => "?").join(",");
+  const sql = `
+  INSERT INTO post_tags (post_id, tag_id)
+  SELECT ?, t.id 
+  FROM tags t 
+  WHERE t.name IN (${placeholder})
+`;
+  await db.execute(sql, [id, ...tags]);
+};
+
+// 게시글 권한 인증
+export const confirmAuth = async (userId, postId) => {
+  const sql = `SELECT user_id FROM posts WHERE id = ?`;
+  const [result] = await db.execute(sql, [postId]);
+
+  return userId == result[0].user_id;
+};
+
+// 게시글 제목, 내용 수정
+export const modifyTitleAndContent = async (id, title, content) => {
+  const modifyList = [];
+  const values = [];
+
+  // 전달된 값에 따라 쿼리문 변경
+  if (title) {
+    modifyList.push("title = ?,");
+    values.push(title);
+  }
+  if (content) {
+    modifyList.push("content = ?,");
+    values.push(content);
+  }
+  values.push(id);
+
+  const sql = `UPDATE posts SET ${modifyList.join()} 
+  updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
+  await db.execute(sql, values);
+};
+
+// 게시글 태그 삭제
+export const deleteTags = async (id) => {
+  const sql = `DELETE FROM post_tags WHERE post_id = ?`;
+  await db.execute(sql, [id]);
+};
+
+// 게시글 삭제
+export const deletePostData = async (id) => {
+  const sql = `DELETE FROM posts WHERE id = ?`;
+  await db.execute(sql, [id]);
 };
