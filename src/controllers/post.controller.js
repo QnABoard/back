@@ -8,6 +8,7 @@ import {
   ModifyTitleAndContent,
   confirmAuth,
   deleteTags,
+  deletePostData,
 } from "../services/post.service.js";
 
 import { getTokenData } from "../utils/getTokenData.js";
@@ -110,4 +111,28 @@ const updatePost = async (req, res, next) => {
   }
 };
 
-export default { getPostById, creatPost, updatePost };
+const deletePost = async (req, res, next) => {
+  const userId = req.user.id;
+  const postId = req.params.id;
+  try {
+    // 권한 확인
+    const isValidId = await confirmAuth(userId, postId);
+    if (!isValidId) {
+      const error = new Error("권한이 없습니다.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    // 태그 데이터 삭제
+    deleteTags(postId);
+
+    // 게시글 데이터 삭제
+    deletePostData(postId);
+
+    //응답
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+export default { getPostById, creatPost, updatePost, deletePost };
