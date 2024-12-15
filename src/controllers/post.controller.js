@@ -2,6 +2,7 @@ import {
   getPostDataById,
   getCommentDataById,
   getLikeAndScrapStatus,
+  addViewCount,
 } from "../services/post.service.js";
 
 import { getTokenData } from "../utils/getTokenData.js";
@@ -11,6 +12,9 @@ const getPostById = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   const { id } = req.params;
   try {
+    // API 호출 시 조회수 증가
+    addViewCount(id);
+
     // 게시글 데이터
     const post = await getPostDataById(id);
     // 예외처리 404
