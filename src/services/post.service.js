@@ -86,16 +86,17 @@ export const ModifyTitleAndContent = async (id, title, content) => {
 
   // 전달된 값에 따라 쿼리문 변경
   if (title) {
-    modifyList.push("title = ?");
+    modifyList.push("title = ?,");
     values.push(title);
   }
   if (content) {
-    modifyList.push("content = ?");
+    modifyList.push("content = ?,");
     values.push(content);
   }
   values.push(id);
 
-  const sql = `UPDATE posts SET ${modifyList.join(", ")} WHERE id = ?`;
+  const sql = `UPDATE posts SET ${modifyList.join()} 
+  updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
   await db.execute(sql, values);
 };
 
