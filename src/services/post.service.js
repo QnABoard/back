@@ -45,3 +45,9 @@ export const getLikeAndScrapStatus = async (email, postId) => {
   const [status] = await db.execute(sql, [userId, postId, userId, postId]);
   return status;
 };
+
+// 조회수 증가
+export const addViewCount = async (id) => {
+  const sql = `UPDATE posts SET view = view + 1 WHERE id = ?`;
+  await db.execute(sql, [id]);
+};
