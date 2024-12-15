@@ -7,7 +7,7 @@ import {
   addTagsData,
   ModifyTitleAndContent,
   confirmAuth,
-  modifyTags,
+  deleteTags,
 } from "../services/post.service.js";
 
 import { getTokenData } from "../utils/getTokenData.js";
@@ -96,7 +96,8 @@ const updatePost = async (req, res, next) => {
       // 빈 배열 전달 시 예외처리
       validateRequireField(tags, "태그");
       // 태그 수정
-      modifyTags(postId, tags);
+      deleteTags(postId);
+      addTagsData(postId, tags);
     }
 
     // 제목&내용 수정
