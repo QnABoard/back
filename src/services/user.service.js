@@ -32,7 +32,7 @@ export const insertUserData = async (email, password, nickname) => {
 
 // 유저 데이터 조회
 export const findUserByEmail = async (email) => {
-  const sql = `SELECT email, nickname ,password, role FROM users WHERE email = ?`;
+  const sql = `SELECT id, email, nickname ,password, role FROM users WHERE email = ?`;
   const [user] = await db.execute(sql, [email]);
   return user[0];
 };
@@ -44,9 +44,13 @@ export const comparePassword = async (userPassword, dbPassword) => {
 };
 
 // JWT 토큰 생성
-export const makeToken = async (email, nickname, role) => {
-  const token = jwt.sign({ email, nickname, role }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
+export const makeToken = async (id, email, nickname, role) => {
+  const token = jwt.sign(
+    { id, email, nickname, role },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1h",
+    }
+  );
   return token;
 };
