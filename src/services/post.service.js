@@ -1,4 +1,5 @@
 import db from "../db/server.js";
+import { validateRequireField } from "../utils/validate.js";
 
 // 게시글 관련 데이터 조회
 export const getPostDataById = async (id) => {
@@ -46,4 +47,14 @@ export const getLikeAndScrapStatus = async (userId, postId) => {
 export const addViewCount = async (id) => {
   const sql = `UPDATE posts SET view = view + 1 WHERE id = ?`;
   await db.execute(sql, [id]);
+};
+
+// 게시글 정보 저장
+export const addPostData = async (id, title, content) => {
+  const sql = `INSERT INTO posts (user_id, title, content) VALUES (?, ?, ?)`;
+  const values = [id, title, content];
+
+  const [result] = await db.execute(sql, values);
+  // 저장된 게시글의 id 리턴
+  return result.insertId;
 };
