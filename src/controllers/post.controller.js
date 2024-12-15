@@ -31,7 +31,7 @@ const getPostById = async (req, res, next) => {
     if (!authHeader) return res.json({ post, comments });
 
     const user = await getTokenData(authHeader);
-    const status = await getLikeAndScrapStatus(user.email, id);
+    const status = await getLikeAndScrapStatus(user.id, id);
 
     // 토큰 있을 시 게시글, 좋아요&스크랩 여부, 댓글 전달
     res.json({ post, status, comments });

@@ -33,12 +33,8 @@ export const getCommentDataById = async (id) => {
 };
 
 // 좋아요 스크랩 여부 조회
-export const getLikeAndScrapStatus = async (email, postId) => {
-  let sql = `SELECT id FROM users WHERE email = ?`;
-  const [result] = await db.execute(sql, [email]);
-  const userId = result[0].id;
-
-  sql = `SELECT 
+export const getLikeAndScrapStatus = async (userId, postId) => {
+  const sql = `SELECT 
   EXISTS(SELECT 1 FROM scraps WHERE user_id = ? AND post_id = ?) AS scrapped,
   EXISTS(SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?) AS liked`;
 
