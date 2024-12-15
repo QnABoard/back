@@ -75,8 +75,12 @@ const loginUser = async (req, res, next) => {
     }
 
     // JWT 토큰 생성
-    const token = await makeToken(user.email, user.nickname, user.role);
-
+    const token = await makeToken(
+      user.id,
+      user.email,
+      user.nickname,
+      user.role
+    );
     // 응답 데이터
     res.json({ success: true, token });
   } catch (err) {
