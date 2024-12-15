@@ -9,6 +9,7 @@ import { getTokenData } from "../utils/getTokenData.js";
 // 메인 화면
 const getMain = async (req, res, next) => {
   const authHeader = req.headers.authorization;
+  const { page = 1 } = req.query;
   try {
     let user;
     // 토큰이 제공됐을 시 유저 데이터 조회
@@ -24,7 +25,7 @@ const getMain = async (req, res, next) => {
     const tags = await getTags();
 
     // 메인 화면 게시글 데이터
-    const posts = await getPostsData();
+    const posts = await getPostsData(page);
 
     // 응답
     res.status(200).json({ user, tags, posts });
