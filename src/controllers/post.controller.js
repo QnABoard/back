@@ -5,7 +5,7 @@ import {
   addViewCount,
   addPostData,
   addTagsData,
-  ModifyTitleAndContent,
+  modifyTitleAndContent,
   confirmAuth,
   deleteTags,
   deletePostData,
@@ -103,7 +103,7 @@ const updatePost = async (req, res, next) => {
 
     // 제목&내용 수정
     // 이 함수는 updated_at을 수정하는 로직이 포함되어 있어 title, content값이 전달되지 않아도 실행되게 설정
-    ModifyTitleAndContent(postId, title, content);
+    modifyTitleAndContent(postId, title, content);
 
     res.status(200).json({ success: true });
   } catch (err) {

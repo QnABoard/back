@@ -80,7 +80,7 @@ export const confirmAuth = async (userId, postId) => {
 };
 
 // 게시글 제목, 내용 수정
-export const ModifyTitleAndContent = async (id, title, content) => {
+export const modifyTitleAndContent = async (id, title, content) => {
   const modifyList = [];
   const values = [];
 
