@@ -48,7 +48,7 @@ const getPostById = async (req, res, next) => {
 };
 
 // 게시글 등록
-const creatPost = async (req, res, next) => {
+const createPost = async (req, res, next) => {
   const userId = req.user.id;
   const { title, tags, content } = req.body;
   try {
@@ -135,4 +135,4 @@ const deletePost = async (req, res, next) => {
     next(err);
   }
 };
-export default { getPostById, creatPost, updatePost, deletePost };
+export default { getPostById, createPost, updatePost, deletePost };
