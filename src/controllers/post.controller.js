@@ -5,6 +5,9 @@ import {
   addViewCount,
   addPostData,
   addTagsData,
+  ModifyTitleAndContent,
+  confirmAuth,
+  modifyTags,
 } from "../services/post.service.js";
 
 import { getTokenData } from "../utils/getTokenData.js";
@@ -66,4 +69,44 @@ const creatPost = async (req, res, next) => {
   }
 };
 
-export default { getPostById, creatPost };
+// 게시글 수정
+const updatePost = async (req, res, next) => {
+  const postId = req.params.id;
+  const userId = req.user.id;
+  const { title, tags, content } = req.body;
+  try {
+    // 전달 데이터(수정내용)가 없을경우
+    if (!Object.keys(req.body).length) {
+      return res.status(200).json({
+        success: true,
+        message: "변경된 내용이 없습니다",
+      });
+    }
+
+    // 권한 확인
+    const isValidId = await confirmAuth(userId, postId);
+    if (!isValidId) {
+      const error = new Error("권한이 없습니다.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    // 전달 데이터에 태그가 있을 시
+    if (tags) {
+      // 빈 배열 전달 시 예외처리
+      validateRequireField(tags, "태그");
+      // 태그 수정
+      modifyTags(postId, tags);
+    }
+
+    // 제목&내용 수정
+    // 이 함수는 updated_at을 수정하는 로직이 포함되어 있어 title, content값이 전달되지 않아도 실행되게 설정
+    ModifyTitleAndContent(postId, title, content);
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { getPostById, creatPost, updatePost };

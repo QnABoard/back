@@ -10,6 +10,7 @@ router.get("/:id", postController.getPostById);
 router.post("/", authMiddleware, postController.creatPost);
 
 // 게시글 수정
+router.put("/:id", authMiddleware, postController.updatePost);
 // 게시글 삭제
 
 export default router;
