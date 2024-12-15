@@ -71,6 +71,14 @@ export const addTagsData = async (id, tags) => {
   await db.execute(sql, [id, ...tags]);
 };
 
+// 게시글 권한 인증
+export const confirmAuth = async (userId, postId) => {
+  const sql = `SELECT user_id FROM posts WHERE id = ?`;
+  const [result] = await db.execute(sql, [postId]);
+
+  return userId == result[0].user_id;
+};
+
 // 게시글 제목, 내용 수정
 export const ModifyTitleAndContent = async (id, title, content) => {
   const modifyList = [];
