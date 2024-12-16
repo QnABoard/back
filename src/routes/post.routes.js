@@ -19,4 +19,7 @@ router.delete("/:id", authMiddleware, postController.deletePost);
 // 게시글 좋아요
 router.post("/:id/like", authMiddleware, optionController.handleLike);
 
+// 해결여부 핸들러
+router.post("/:id/solved", authMiddleware, optionController.handleSolved);
+
 export default router;
