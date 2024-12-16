@@ -41,5 +41,5 @@ export const getPostByTag = async (tags) => {
   GROUP BY post_id HAVING COUNT(DISTINCT tag_id) = ?`;
 
   const [result] = await db.execute(sql, [...tags, tags.length]);
-  return result;
+  return result.map((id) => id.post_id);
 };
