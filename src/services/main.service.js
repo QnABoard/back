@@ -20,8 +20,13 @@ export const getPostsData = async (page, idList) => {
       mainSQL.groupBy +
       ` ORDER BY p.created_at DESC LIMIT ? OFFSET ?`;
 
-    [posts] = await db.query(sql, [...idList, limit, offset]);
-    return posts;
+    try {
+      [posts] = await db.query(sql, [...idList, limit, offset]);
+      return posts;
+    } catch (err) {
+      // 데이터가 없거나 태그 값이 유효하지 않을 시 빈 배열 전달
+      return [];
+    }
   }
 
   sql =
