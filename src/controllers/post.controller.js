@@ -1,7 +1,6 @@
 import {
   getPostDataById,
   getCommentDataById,
-  getLikeAndScrapStatus,
   addViewCount,
   addPostData,
   addTagsData,
@@ -17,13 +16,19 @@ import { validateRequireField } from "../utils/validate.js";
 // 게시글 조회
 const getPostById = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  const { id } = req.params;
+  const postId = req.params.id;
   try {
     // API 호출 시 조회수 증가
-    addViewCount(id);
+    addViewCount(postId);
+
+    let userId = 0;
+    if (authHeader) {
+      const user = await getTokenData(authHeader);
+      userId = user.id;
+    }
 
     // 게시글 데이터
-    const post = await getPostDataById(id);
+    const post = await getPostDataById(userId, postId);
     // 예외처리 404
     if (!post.length) {
       const error = new Error("게시글이 존재하지 않습니다.");
@@ -32,16 +37,9 @@ const getPostById = async (req, res, next) => {
     }
 
     // 댓글 데이터
-    const comments = await getCommentDataById(id);
+    const comments = await getCommentDataById(postId);
 
-    // 토큰 없을 시 게시글과 댓글만 전달
-    if (!authHeader) return res.json({ post, comments });
-
-    const user = await getTokenData(authHeader);
-    const status = await getLikeAndScrapStatus(user.id, id);
-
-    // 토큰 있을 시 게시글, 좋아요&스크랩 여부, 댓글 전달
-    res.json({ post, status, comments });
+    res.json({ post, comments });
   } catch (err) {
     next(err);
   }
