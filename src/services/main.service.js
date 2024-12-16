@@ -32,7 +32,7 @@ export const getTags = async () => {
   return tags;
 };
 
-// 태그별 게시글 조회
+// 태그별 게시글 아이디 조회
 export const getPostByTag = async (tags) => {
   tags = tags.split(",");
   const placeholder = Array(tags.length).fill("?").join(",");
