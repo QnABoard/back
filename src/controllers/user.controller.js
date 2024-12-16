@@ -82,7 +82,7 @@ const loginUser = async (req, res, next) => {
       user.role
     );
     // 응답 데이터
-    res.json({ success: true, token });
+    res.status(200).json({ success: true, token });
   } catch (err) {
     next(err);
   }
