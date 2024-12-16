@@ -34,8 +34,7 @@ export const getUserMainData = async (email) => {
 
 // 메인 화면 태그정보
 export const getTags = async () => {
-  const sql = `SELECT name FROM tags`;
-  let [tags] = await db.execute(sql);
-  tags = tags.map((tag) => tag.name);
+  const sql = `SELECT id, name FROM tags`;
+  const [tags] = await db.execute(sql);
   return tags;
 };
