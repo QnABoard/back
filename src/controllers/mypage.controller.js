@@ -1,4 +1,9 @@
-import { getProfile, getUserPosts } from "../services/mypage.service.js";
+import {
+  getProfile,
+  getUserLikePostList,
+  getUserLikePosts,
+  getUserPosts,
+} from "../services/mypage.service.js";
 import { checkNicknameExists } from "../services/user.service.js";
 
 // 마이페이지 데이터 조회
@@ -26,4 +31,28 @@ const getMypage = async (req, res, next) => {
   }
 };
 
-export default { getMypage };
+// 마이페이지 유저가 좋아요 한 게시글 조회
+const getMypageLikes = async (req, res, next) => {
+  const { nickname } = req.params;
+  try {
+    // 존재하지 않는 닉네임 예외처리
+    const isUserExist = await checkNicknameExists(nickname);
+    if (!isUserExist) {
+      const error = new Error("존재하지 않는 유저입니다.");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // 좋아요한 게시글 id 리스트
+    const list = await getUserLikePostList(nickname);
+
+    // 좋아요한 게시글
+    const posts = await getUserLikePosts(list);
+
+    // 응답
+    res.status(200).json(posts);
+  } catch (err) {
+    next(err);
+  }
+};
+export default { getMypage, getMypageLikes };
