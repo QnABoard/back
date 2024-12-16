@@ -31,3 +31,15 @@ export const getTags = async () => {
   const [tags] = await db.execute(sql);
   return tags;
 };
+
+// 태그별 게시글 조회
+export const getPostByTag = async (tags) => {
+  tags = tags.split(",");
+  const placeholder = Array(tags.length).fill("?").join(",");
+
+  const sql = `SELECT post_id FROM post_tags WHERE tag_id in (${placeholder})
+  GROUP BY post_id HAVING COUNT(DISTINCT tag_id) = ?`;
+
+  const [result] = await db.execute(sql, [...tags, tags.length]);
+  return result;
+};
