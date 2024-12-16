@@ -3,17 +3,33 @@ import jwt from "jsonwebtoken";
 import mainSQL from "../utils/mainSQL.js";
 
 // 메인 화면 게시글 정보
-export const getPostsData = async (page) => {
+export const getPostsData = async (page, idList) => {
   // 리밋 20으로 고정
   const limit = 20;
   // 오프셋 설정
   const offset = (page - 1) * limit;
-  const sql =
+
+  let sql;
+  let posts;
+
+  if (idList) {
+    const placeholder = Array(idList.length).fill("?").join(",");
+    sql =
+      mainSQL.base +
+      ` WHERE p.id IN (${placeholder}) ` +
+      mainSQL.groupBy +
+      ` ORDER BY p.created_at DESC LIMIT ? OFFSET ?`;
+
+    [posts] = await db.query(sql, [...idList, limit, offset]);
+    return posts;
+  }
+
+  sql =
     mainSQL.base +
     mainSQL.groupBy +
     ` ORDER BY p.created_at DESC LIMIT ? OFFSET ?`;
 
-  const [posts] = await db.query(sql, [limit, offset]);
+  [posts] = await db.query(sql, [limit, offset]);
 
   return posts;
 };
