@@ -25,7 +25,7 @@ const getMypage = async (req, res, next) => {
     const posts = await getUserPosts(profile.id);
 
     // 응답
-    res.json({ profile, posts });
+    res.status(200).json({ profile, posts });
   } catch (err) {
     next(err);
   }
