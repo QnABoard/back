@@ -20,3 +20,12 @@ export const toggleLike = async (userId, postId, boolean) => {
 
   await db.execute(sql, [userId, postId]);
 };
+
+// 해결여부 토글
+export const toggleSolved = async (postId) => {
+  const sql = `UPDATE posts SET solved =
+    CASE WHEN solved = 1 THEN 0 ELSE 1 END
+    WHERE id = ?`;
+
+  await db.execute(sql, [postId]);
+};
