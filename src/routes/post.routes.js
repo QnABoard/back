@@ -7,7 +7,7 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 router.get("/:id", postController.getPostById);
 
 // 게시글 등록
-router.post("/", authMiddleware, postController.creatPost);
+router.post("/", authMiddleware, postController.createPost);
 
 // 게시글 수정
 router.put("/:id", authMiddleware, postController.updatePost);

@@ -2,12 +2,13 @@ import db from "../db/server.js";
 import { validateRequireField } from "../utils/validate.js";
 
 // 게시글 관련 데이터 조회
-export const getPostDataById = async (id) => {
-  // id, 제목, 내용, 작성 일자, 수정 일자, 조회수, 해결여부, 작성자 닉네임, 좋아요 수, 태그
+export const getPostDataById = async (userId, postId) => {
+  // id, 제목, 내용, 작성 일자, 수정 일자, 조회수, 해결여부, 작성자 닉네임, 좋아요 수, 태그, 좋아요 여부
   const sql = `SELECT
     p.id, p.title, p.content, p.created_at, p.updated_at, p.view, p.solved,
     u.nickname, COUNT(DISTINCT l.id) AS like_count, 
-    GROUP_CONCAT(DISTINCT t.name) AS tags
+    GROUP_CONCAT(DISTINCT t.name) AS tags,
+    EXISTS(SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?) AS liked 
     FROM posts p
     JOIN users u ON p.user_id = u.id
     LEFT JOIN likes l ON p.id = l.post_id
@@ -16,7 +17,7 @@ export const getPostDataById = async (id) => {
     WHERE p.id = ?
     GROUP BY p.id, p.title, p.content, p.created_at, p.updated_at, p.view, p.solved, u.nickname`;
 
-  const [postsData] = await db.execute(sql, [id]);
+  const [postsData] = await db.execute(sql, [userId, postId, postId]);
   return postsData;
 };
 
@@ -31,16 +32,6 @@ export const getCommentDataById = async (id) => {
 
   const [postComments] = await db.execute(sql, [id]);
   return postComments;
-};
-
-// 좋아요 스크랩 여부 조회
-export const getLikeAndScrapStatus = async (userId, postId) => {
-  const sql = `SELECT 
-  EXISTS(SELECT 1 FROM scraps WHERE user_id = ? AND post_id = ?) AS scrapped,
-  EXISTS(SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?) AS liked`;
-
-  const [status] = await db.execute(sql, [userId, postId, userId, postId]);
-  return status;
 };
 
 // 조회수 증가
