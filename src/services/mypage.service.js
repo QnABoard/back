@@ -16,3 +16,12 @@ export const getUserPosts = async (id) => {
   const [result] = await db.execute(sql, [id]);
   return result;
 };
+
+// 유저가 좋아요 한 게시글 id 목록 조회
+export const getUserLikePostList = async (nickname) => {
+  const sql = `SELECT post_id FROM likes WHERE user_id = (SELECT id FROM users WHERE nickname = ?)`;
+
+  const [result] = await db.execute(sql, [nickname]);
+  // 배열 형식으로 id값만 전달
+  return result.map((post) => post.post_id);
+};
