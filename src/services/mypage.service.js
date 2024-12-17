@@ -21,7 +21,11 @@ export const getUserLikePostList = async (nickname) => {
 // 마이페이지 게시글 조회: 파라미터로 where문 전달
 export const getMypagePosts = async (params, where, page) => {
   const limit = 20;
+  // 오프셋 설정
+  const offset = (page - 1) * limit;
+  page = +page;
+
   const sql = mainSQL.base + where + mainSQL.groupBy + mainSQL.pagination;
-  const [result] = await db.query(sql, [params, limit, page]);
+  const [result] = await db.query(sql, [params, limit, offset]);
   return result;
 };
