@@ -17,7 +17,7 @@ export const getPostsData = async (page, idList) => {
       mainSQL.base +
       ` WHERE p.id IN (${placeholder}) ` +
       mainSQL.groupBy +
-      ` ORDER BY p.created_at DESC LIMIT ? OFFSET ?`;
+      mainSQL.pagination;
 
     try {
       [posts] = await db.query(sql, [...idList, limit, offset]);
