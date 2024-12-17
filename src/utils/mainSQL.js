@@ -11,4 +11,6 @@ const base = `SELECT
 
 const groupBy = ` GROUP BY p.id, p.title, p.content, p.created_at, p.updated_at, p.view, p.solved, u.nickname`;
 
-export default { base, groupBy };
+const pagination = ` ORDER BY p.created_at DESC LIMIT ? OFFSET ?`;
+
+export default { base, groupBy, pagination };
