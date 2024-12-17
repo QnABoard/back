@@ -28,10 +28,7 @@ export const getPostsData = async (page, idList) => {
     }
   }
 
-  sql =
-    mainSQL.base +
-    mainSQL.groupBy +
-    ` ORDER BY p.created_at DESC LIMIT ? OFFSET ?`;
+  sql = mainSQL.base + mainSQL.groupBy + mainSQL.pagination;
 
   [posts] = await db.query(sql, [limit, offset]);
 
