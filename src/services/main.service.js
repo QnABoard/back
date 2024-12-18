@@ -44,7 +44,6 @@ export const getTags = async () => {
 
 // 태그별 게시글 아이디 조회
 export const getPostByTag = async (tags) => {
-  tags = tags.split(",");
   const placeholder = Array(tags.length).fill("?").join(",");
 
   const sql = `SELECT post_id FROM post_tags WHERE tag_id in (${placeholder})
