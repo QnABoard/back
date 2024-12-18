@@ -6,6 +6,7 @@ import {
   findUserByEmail,
   comparePassword,
   makeToken,
+  deleteUserData,
 } from "../services/user.service.js";
 
 import { validateRequireField } from "../utils/validate.js";
@@ -88,4 +89,23 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-export default { registerUser, loginUser };
+// 회원 탈퇴
+const deleteUser = async (req, res, next) => {
+  const user = req.user;
+  const targetId = +req.params.id;
+  try {
+    // 권한 확인
+    if (user.id !== targetId && user.role !== "admin") {
+      const error = new Error("권한이 없습니다.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    await deleteUserData(user.id);
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { registerUser, loginUser, deleteUser };
