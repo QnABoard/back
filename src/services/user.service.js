@@ -54,3 +54,9 @@ export const makeToken = async (id, email, nickname, role) => {
   );
   return token;
 };
+
+// 회원 탈퇴
+export const deleteUserData = async (id) => {
+  const sql = `DELETE FROM users WHERE id = ?`;
+  await db.execute(sql, [id]);
+};
