@@ -52,3 +52,15 @@ export const getPostByTag = async (tags) => {
   const [result] = await db.execute(sql, [...tags, tags.length]);
   return result.map((id) => id.post_id);
 };
+
+// 페이지네이션 데이터 조회
+export const getPaginationData = async (where) => {
+  let sql = `SELECT COUNT(*) AS count FROM posts`;
+  if (where) sql += where;
+  const [count] = await db.execute(sql);
+  const totalCount = count[0].count;
+  const limit = 20;
+  const totalPages = Math.ceil(totalCount / limit);
+  const data = { totalCount, totalPages, limit };
+  return data;
+};
