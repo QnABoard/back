@@ -17,7 +17,7 @@ export const getPostsData = async (page, idList) => {
       mainSQL.base +
       ` WHERE p.id IN (${placeholder}) ` +
       mainSQL.groupBy +
-      ` ORDER BY p.created_at DESC LIMIT ? OFFSET ?`;
+      mainSQL.pagination;
 
     try {
       [posts] = await db.query(sql, [...idList, limit, offset]);
@@ -28,10 +28,7 @@ export const getPostsData = async (page, idList) => {
     }
   }
 
-  sql =
-    mainSQL.base +
-    mainSQL.groupBy +
-    ` ORDER BY p.created_at DESC LIMIT ? OFFSET ?`;
+  sql = mainSQL.base + mainSQL.groupBy + mainSQL.pagination;
 
   [posts] = await db.query(sql, [limit, offset]);
 
@@ -47,7 +44,6 @@ export const getTags = async () => {
 
 // 태그별 게시글 아이디 조회
 export const getPostByTag = async (tags) => {
-  tags = tags.split(",");
   const placeholder = Array(tags.length).fill("?").join(",");
 
   const sql = `SELECT post_id FROM post_tags WHERE tag_id in (${placeholder})

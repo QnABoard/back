@@ -9,14 +9,6 @@ export const getProfile = async (nickname) => {
   return result[0];
 };
 
-// 유저가 작성한 게시물 조회
-export const getUserPosts = async (id) => {
-  const sql = mainSQL.base + ` WHERE p.user_id = ? ` + mainSQL.groupBy;
-
-  const [result] = await db.execute(sql, [id]);
-  return result;
-};
-
 // 유저가 좋아요 한 게시글 id 목록 조회
 export const getUserLikePostList = async (nickname) => {
   const sql = `SELECT post_id FROM likes WHERE user_id = (SELECT id FROM users WHERE nickname = ?)`;
@@ -26,9 +18,14 @@ export const getUserLikePostList = async (nickname) => {
   return result.map((post) => post.post_id);
 };
 
-// 좋아요 한 게시글 조회
-export const getUserLikePosts = async (list) => {
-  const sql = mainSQL.base + ` WHERE p.id IN (?) ` + mainSQL.groupBy;
-  const [result] = await db.query(sql, [list]);
+// 마이페이지 게시글 조회: 파라미터로 where문 전달
+export const getMypagePosts = async (params, where, page) => {
+  const limit = 20;
+  // 오프셋 설정
+  const offset = (page - 1) * limit;
+  page = +page;
+
+  const sql = mainSQL.base + where + mainSQL.groupBy + mainSQL.pagination;
+  const [result] = await db.query(sql, [params, limit, offset]);
   return result;
 };
