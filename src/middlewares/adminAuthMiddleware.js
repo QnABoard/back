@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config.js";
 
-const AdminAuthMiddleware = (req, res, next) => {
+const adminAuthMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -32,4 +32,4 @@ const AdminAuthMiddleware = (req, res, next) => {
   } catch (error) {}
 };
 
-export default AdminAuthMiddleware;
+export default adminAuthMiddleware;
