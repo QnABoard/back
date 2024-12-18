@@ -2,6 +2,7 @@ import {
   getPostsData,
   getTags,
   getPostByTag,
+  getPaginationData,
 } from "../services/main.service.js";
 
 // 메인 화면
@@ -18,8 +19,12 @@ const getMain = async (req, res, next) => {
     // 메인 화면 태그 데이터
     const tags = await getTags();
 
+    // 페이지네이션 데이터
+    const pagination = await getPaginationData();
+    pagination.page = page;
+
     // 응답
-    res.status(200).json({ tags, posts });
+    res.status(200).json({ tags, pagination, posts });
   } catch (err) {
     next(err);
   }
