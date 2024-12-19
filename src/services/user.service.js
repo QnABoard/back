@@ -67,3 +67,10 @@ export const updateIntro = async (id, intro) => {
 
   await db.execute(sql, [intro, id]);
 };
+
+// 유저 닉네임 수정
+export const updateNickname = async (id, nickname) => {
+  const sql = `UPDATE users SET nickname = ? WHERE id = ?`;
+
+  await db.execute(sql, [nickname, id]);
+};
