@@ -11,7 +11,7 @@ router.post("/join", userController.registerUser);
 router.post("/login", userController.loginUser);
 
 // 회원 정보 수정
-router.post("/:id/update", authMiddleware, userController.updateProfile);
+router.put("/:id/update", authMiddleware, userController.updateProfile);
 
 // 회원탈퇴
 router.delete("/:id/delete", authMiddleware, userController.deleteUser);
