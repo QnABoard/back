@@ -1,4 +1,7 @@
-import { getPaginationData } from "../services/main.service.js";
+import {
+  getPaginationData,
+  getPaginationDataFromLikes,
+} from "../services/main.service.js";
 import {
   getProfile,
   getUserLikePostList,
@@ -55,11 +58,16 @@ const getMypageLikes = async (req, res, next) => {
     const list = await getUserLikePostList(nickname);
 
     // 좋아요한 게시글
-    const where = " WHERE p.id IN (?)";
+    let where = " WHERE p.id IN (?)";
     const posts = await getMypagePosts(list, where, page);
 
+    // 페이지네이션 데이터
+    where = " WHERE user_id = (SELECT id FROM users WHERE nickname=?)";
+    const pagination = await getPaginationDataFromLikes(where, nickname);
+    pagination.page = page;
+
     // 응답
-    res.status(200).json(posts);
+    res.status(200).json({ posts, pagination });
   } catch (err) {
     next(err);
   }
