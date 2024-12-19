@@ -7,6 +7,7 @@ import {
   comparePassword,
   makeToken,
   deleteUserData,
+  updateIntro,
 } from "../services/user.service.js";
 
 import { validateRequireField } from "../utils/validate.js";
@@ -101,11 +102,30 @@ const deleteUser = async (req, res, next) => {
       throw error;
     }
 
-    await deleteUserData(user.id);
+    await deleteUserData(targetId);
     res.status(200).json({ success: true });
   } catch (err) {
     next(err);
   }
 };
 
-export default { registerUser, loginUser, deleteUser };
+// 유저 정보 수정
+const updateProfile = async (req, res, next) => {
+  const id = +req.params.id;
+  const { intro } = req.body;
+  const user = req.user;
+  try {
+    if (user.id != id) {
+      const error = new Error("권한이 없습니다.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    await updateIntro(id, intro);
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { registerUser, loginUser, deleteUser, updateProfile };
