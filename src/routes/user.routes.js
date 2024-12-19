@@ -10,8 +10,11 @@ router.post("/join", userController.registerUser);
 // 로그인
 router.post("/login", userController.loginUser);
 
-// 회원 정보 수정
-router.post("/:id/update", authMiddleware, userController.updateProfile);
+// 회원 소개 수정
+router.put("/:id/intro", authMiddleware, userController.updateProfile);
+
+// 회원 닉네임 수정
+router.put("/:id/nickname", authMiddleware, userController.updateUserNickname);
 
 // 회원탈퇴
 router.delete("/:id/delete", authMiddleware, userController.deleteUser);

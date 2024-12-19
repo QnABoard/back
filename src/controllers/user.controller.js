@@ -8,6 +8,7 @@ import {
   makeToken,
   deleteUserData,
   updateIntro,
+  updateNickname,
 } from "../services/user.service.js";
 
 import { validateRequireField } from "../utils/validate.js";
@@ -128,4 +129,40 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
-export default { registerUser, loginUser, deleteUser, updateProfile };
+const updateUserNickname = async (req, res, next) => {
+  const id = +req.params.id;
+  const { newNickname } = req.body;
+  const user = req.user;
+  try {
+    // 권한 확인
+    if (user.id != id) {
+      const error = new Error("권한이 없습니다.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    // 닉네임 중복 체크
+    const isDuplicateNickname = await checkNicknameExists(newNickname);
+    if (isDuplicateNickname) {
+      const error = new Error("중복된 닉네임 입니다.");
+      error.statusCode = 409;
+      throw error;
+    }
+
+    // 닉네임 변경
+    await updateNickname(id, newNickname);
+
+    // 응답
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default {
+  registerUser,
+  loginUser,
+  deleteUser,
+  updateProfile,
+  updateUserNickname,
+};

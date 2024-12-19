@@ -54,10 +54,34 @@ export const getPostByTag = async (tags) => {
 };
 
 // 페이지네이션 데이터 조회
-export const getPaginationData = async (where) => {
+export const getPaginationData = async (where, param) => {
   let sql = `SELECT COUNT(*) AS count FROM posts`;
   if (where) sql += where;
-  const [count] = await db.execute(sql);
+  let count;
+  if (param) {
+    [count] = await db.execute(sql, [param]);
+  } else {
+    [count] = await db.execute(sql);
+  }
+  const totalCount = count[0].count;
+  const limit = 20;
+  const totalPages = Math.ceil(totalCount / limit);
+  const data = { totalCount, totalPages, limit };
+  return data;
+};
+
+// 좋아요 테이블 페이지네이션 데이터 조회
+export const getPaginationDataFromLikes = async (where, param) => {
+  let sql = `SELECT COUNT(*) AS count FROM likes`;
+  if (where) sql += where;
+  console.log(sql);
+  console.log(param);
+  let count;
+  if (param) {
+    [count] = await db.query(sql, [param]);
+  } else {
+    [count] = await db.execute(sql);
+  }
   const totalCount = count[0].count;
   const limit = 20;
   const totalPages = Math.ceil(totalCount / limit);
