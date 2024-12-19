@@ -7,3 +7,9 @@ export const getAllUsers = async () => {
   const [users] = await db.execute(sql);
   return users;
 };
+
+// 태그 데이터 추가
+export const insertTags = async (tags) => {
+  const sql = `INSERT INTO tags (name) VALUES (?)`;
+  await tags.forEach((tag) => db.execute(sql, [tag]));
+};

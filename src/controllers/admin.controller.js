@@ -1,16 +1,9 @@
-import { getAllUsers } from "../services/admin.service.js";
+import { getAllUsers, insertTags } from "../services/admin.service.js";
 
 // 어드민 페이지
 const getAdminPage = async (req, res, next) => {
-  const role = req.user.role;
-
   try {
-    if (role !== "admin") {
-      const error = new Error("권한이 없습니다.");
-      error.statusCode = 401;
-      throw error;
-    }
-
+    // 전체 유저 정보 조회
     const users = await getAllUsers();
     res.status(200).json(users);
   } catch (err) {
@@ -18,4 +11,14 @@ const getAdminPage = async (req, res, next) => {
   }
 };
 
-export default { getAdminPage };
+// 태그 추가
+const addTags = async (req, res, next) => {
+  const { tags } = req.body;
+  try {
+    const result = await insertTags(tags);
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+export default { getAdminPage, addTags };
