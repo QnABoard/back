@@ -63,7 +63,6 @@ export const deleteUserData = async (id) => {
 
 // 유저 소개 수정
 export const updateIntro = async (id, intro) => {
-  console.log("service");
   const sql = `UPDATE users SET introduce = ? WHERE id = ?`;
 
   await db.execute(sql, [intro, id]);

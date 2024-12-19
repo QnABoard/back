@@ -115,7 +115,6 @@ const updateProfile = async (req, res, next) => {
   const { intro } = req.body;
   const user = req.user;
   try {
-    console.log(id, user.id);
     if (user.id != id) {
       const error = new Error("권한이 없습니다.");
       error.statusCode = 401;
