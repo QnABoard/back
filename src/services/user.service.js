@@ -60,3 +60,11 @@ export const deleteUserData = async (id) => {
   const sql = `UPDATE users SET role = "deleted", email = null, password = null ,nickname = "탈퇴한 계정" WHERE id=?`;
   await db.execute(sql, [id]);
 };
+
+// 유저 소개 수정
+export const updateIntro = async (id, intro) => {
+  console.log("service");
+  const sql = `UPDATE users SET introduce = ? WHERE id = ?`;
+
+  await db.execute(sql, [intro, id]);
+};
