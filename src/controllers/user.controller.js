@@ -102,7 +102,7 @@ const deleteUser = async (req, res, next) => {
       throw error;
     }
 
-    await deleteUserData(user.id);
+    await deleteUserData(targetId);
     res.status(200).json({ success: true });
   } catch (err) {
     next(err);
