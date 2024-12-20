@@ -8,6 +8,7 @@ import {
   getMypagePosts,
 } from "../services/mypage.service.js";
 import { checkNicknameExists } from "../services/user.service.js";
+import ERRORS from "../utils/errors.js";
 
 // 마이페이지 데이터 조회
 const getMypage = async (req, res, next) => {
@@ -17,9 +18,7 @@ const getMypage = async (req, res, next) => {
     // 존재하지 않는 닉네임 예외처리 -> 닉네임 중복 체크 로직 재활용
     const isUserExist = await checkNicknameExists(nickname);
     if (!isUserExist) {
-      const error = new Error("존재하지 않는 유저입니다.");
-      error.statusCode = 404;
-      throw error;
+      throw ERRORS.notFound("존재하지 않는 유저입니다.");
     }
 
     // 유저 프로필
@@ -49,9 +48,7 @@ const getMypageLikes = async (req, res, next) => {
     // 존재하지 않는 닉네임 예외처리
     const isUserExist = await checkNicknameExists(nickname);
     if (!isUserExist) {
-      const error = new Error("존재하지 않는 유저입니다.");
-      error.statusCode = 404;
-      throw error;
+      throw ERRORS.notFound("존재하지 않는 유저입니다.");
     }
 
     // 좋아요한 게시글 id 리스트
