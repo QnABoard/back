@@ -131,6 +131,7 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+// 유저 닉네임 수정
 const updateUserNickname = async (req, res, next) => {
   const id = +req.params.id;
   const { newNickname } = req.body;
@@ -170,12 +171,14 @@ const updateUserIcon = async (req, res, next) => {
   const id = +req.params.id;
 
   try {
+    // 유저 권한 예외처리
     if (userId !== id) {
       const error = new Error("권한이 없습니다.");
       error.statusCode = 404;
       throw error;
     }
 
+    // 아이콘 파일 예외처리
     if (!file) {
       const error = new Error("파일이 제공되지 않았습니다.");
       error.statusCode = 400;
