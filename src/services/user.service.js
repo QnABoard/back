@@ -57,7 +57,8 @@ export const makeToken = async (id, email, nickname, role) => {
 
 // 회원 탈퇴
 export const deleteUserData = async (id) => {
-  const sql = `UPDATE users SET role = "deleted", email = null, password = null ,nickname = "탈퇴한 계정" WHERE id=?`;
+  const sql = `UPDATE users SET role = "deleted", email = null, password = null ,nickname = "탈퇴한 계정",
+  introduce = null, icon = null WHERE id=?`;
   await db.execute(sql, [id]);
 };
 
