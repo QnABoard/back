@@ -9,7 +9,7 @@ const upload = multer({
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true); // 허용
     } else {
-      cb(new Error("Invalid file type. Only images are allowed.")); // 거부
+      cb(new Error("유효하지 않은 타입입니다.")); // 거부
     }
   },
 });
