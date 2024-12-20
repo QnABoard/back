@@ -1,3 +1,4 @@
+import uploadToS3 from "../db/aws-s3.js";
 import {
   checkEmailExists,
   checkNicknameExists,
@@ -9,6 +10,7 @@ import {
   deleteUserData,
   updateIntro,
   updateNickname,
+  updateIcon,
 } from "../services/user.service.js";
 
 import { validateRequireField } from "../utils/validate.js";
@@ -159,10 +161,43 @@ const updateUserNickname = async (req, res, next) => {
   }
 };
 
+// 유저 아이콘 수정
+const updateUserIcon = async (req, res, next) => {
+  // 미들웨어에서 추출
+  const userId = req.user.id;
+  const file = req.file;
+
+  const id = +req.params.id;
+
+  try {
+    if (userId !== id) {
+      const error = new Error("권한이 없습니다.");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (!file) {
+      const error = new Error("파일이 제공되지 않았습니다.");
+      error.statusCode = 400;
+      throw error;
+    }
+    // S3에 파일 업로드
+    const iconUrl = await uploadToS3(file);
+
+    // DB에 저장
+    await updateIcon(userId, iconUrl);
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   registerUser,
   loginUser,
   deleteUser,
   updateProfile,
   updateUserNickname,
+  updateUserIcon,
 };

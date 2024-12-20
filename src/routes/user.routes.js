@@ -3,6 +3,7 @@ const router = express.Router();
 import userController from "../controllers/user.controller.js";
 import mypageController from "../controllers/mypage.controller.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
+import uploadMiddleware from "../middlewares/uploadMiddleware.js";
 
 // 회원가입
 router.post("/join", userController.registerUser);
@@ -15,6 +16,13 @@ router.put("/:id/intro", authMiddleware, userController.updateProfile);
 
 // 회원 닉네임 수정
 router.put("/:id/nickname", authMiddleware, userController.updateUserNickname);
+
+router.post(
+  "/:id/icon",
+  authMiddleware,
+  uploadMiddleware,
+  userController.updateUserIcon
+);
 
 // 회원탈퇴
 router.delete("/:id/delete", authMiddleware, userController.deleteUser);
