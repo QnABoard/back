@@ -74,3 +74,10 @@ export const updateNickname = async (id, nickname) => {
 
   await db.execute(sql, [nickname, id]);
 };
+
+// 회원 아이콘 수정
+export const updateIcon = async (id, url) => {
+  const sql = `UPDATE users SET icon = ? WHERE id = ?`;
+
+  await db.execute(sql, [url, id]);
+};
