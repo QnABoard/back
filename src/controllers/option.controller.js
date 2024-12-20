@@ -4,6 +4,7 @@ import {
   toggleSolved,
 } from "../services/option.service.js";
 import { confirmAuth } from "../services/post.service.js";
+import ERRORS from "../utils/errors.js";
 
 // 좋아요 추가/제거
 const handleLike = async (req, res, next) => {
@@ -32,9 +33,7 @@ const handleSolved = async (req, res, next) => {
     // 권한 확인
     const isValidId = await confirmAuth(userId, postId);
     if (!isValidId) {
-      const error = new Error("권한이 없습니다.");
-      error.statusCode = 401;
-      throw error;
+      throw ERRORS.unaunauthorized();
     }
 
     // 해결여부 토글

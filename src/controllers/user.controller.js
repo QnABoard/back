@@ -14,6 +14,7 @@ import {
 } from "../services/user.service.js";
 
 import { validateRequireField } from "../utils/validate.js";
+import ERRORS from "../utils/errors.js";
 
 // 회원가입
 const registerUser = async (req, res, next) => {
@@ -26,19 +27,13 @@ const registerUser = async (req, res, next) => {
     validateRequireField(nickname, "닉네임");
 
     // 이메일 중복 여부 확인
-    const isDuplicateEmail = await checkEmailExists(email);
-    if (isDuplicateEmail) {
-      const error = new Error("중복된 이메일입니다.");
-      error.statusCode = 409;
-      throw error;
+    if (await checkEmailExists(email)) {
+      throw ERRORS.conflict("중복된 이메일 입니다.");
     }
 
     // 닉네임 중복 여부 확인
-    const isDuplicateNickname = await checkNicknameExists(nickname);
-    if (isDuplicateNickname) {
-      const error = new Error("중복된 닉네임 입니다.");
-      error.statusCode = 409;
-      throw error;
+    if (await checkNicknameExists(nickname)) {
+      throw ERRORS.conflict("중복된 닉네임 입니다.");
     }
 
     // 비밀번호 암호화
@@ -65,18 +60,14 @@ const loginUser = async (req, res, next) => {
     const user = await findUserByEmail(email);
     // 없을 시 예외처리
     if (!user) {
-      const error = new Error("등록되지 않은 이메일입니다.");
-      error.statusCode = 404;
-      throw error;
+      throw ERRORS.notFound("등록되지 않은 이메일입니다.");
     }
 
     // 비밀번호 검증
     const passwordVerify = await comparePassword(password, user.password);
     // 비밀번호 틀렸을 시 예외처리
     if (!passwordVerify) {
-      const error = new Error("비밀번호가 틀렸습니다.");
-      error.statusCode = 401;
-      throw error;
+      throw ERRORS.unaunauthorized("비밀번호가 틀렸습니다.");
     }
 
     // JWT 토큰 생성
@@ -100,9 +91,7 @@ const deleteUser = async (req, res, next) => {
   try {
     // 권한 확인
     if (user.id !== targetId && user.role !== "admin") {
-      const error = new Error("권한이 없습니다.");
-      error.statusCode = 401;
-      throw error;
+      throw ERRORS.unaunauthorized();
     }
 
     await deleteUserData(targetId);
@@ -118,10 +107,9 @@ const updateProfile = async (req, res, next) => {
   const { intro } = req.body;
   const user = req.user;
   try {
+    // 권한 확인
     if (user.id != id) {
-      const error = new Error("권한이 없습니다.");
-      error.statusCode = 401;
-      throw error;
+      throw ERRORS.unaunauthorized();
     }
 
     await updateIntro(id, intro);
@@ -131,6 +119,7 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+// 유저 닉네임 수정
 const updateUserNickname = async (req, res, next) => {
   const id = +req.params.id;
   const { newNickname } = req.body;
@@ -138,17 +127,12 @@ const updateUserNickname = async (req, res, next) => {
   try {
     // 권한 확인
     if (user.id != id) {
-      const error = new Error("권한이 없습니다.");
-      error.statusCode = 401;
-      throw error;
+      throw ERRORS.unaunauthorized();
     }
 
     // 닉네임 중복 체크
-    const isDuplicateNickname = await checkNicknameExists(newNickname);
-    if (isDuplicateNickname) {
-      const error = new Error("중복된 닉네임 입니다.");
-      error.statusCode = 409;
-      throw error;
+    if (await checkNicknameExists(newNickname)) {
+      throw ERRORS.conflict("중복된 닉네임 입니다.");
     }
 
     // 닉네임 변경
@@ -170,17 +154,16 @@ const updateUserIcon = async (req, res, next) => {
   const id = +req.params.id;
 
   try {
+    // 유저 권한 예외처리
     if (userId !== id) {
-      const error = new Error("권한이 없습니다.");
-      error.statusCode = 404;
-      throw error;
+      throw ERRORS.unaunauthorized();
     }
 
+    // 아이콘 파일 예외처리
     if (!file) {
-      const error = new Error("파일이 제공되지 않았습니다.");
-      error.statusCode = 400;
-      throw error;
+      throw ERRORS.badRequest("파일이 제공되지 않았습니다.");
     }
+
     // S3에 파일 업로드
     const iconUrl = await uploadToS3(file);
 
