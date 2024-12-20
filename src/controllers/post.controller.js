@@ -12,6 +12,7 @@ import {
 
 import { getTokenData } from "../utils/getTokenData.js";
 import { validateRequireField } from "../utils/validate.js";
+import ERRORS from "../utils/errors.js";
 
 // 게시글 조회
 const getPostById = async (req, res, next) => {
@@ -31,9 +32,7 @@ const getPostById = async (req, res, next) => {
     const post = await getPostDataById(userId, postId);
     // 예외처리 404
     if (!post.length) {
-      const error = new Error("게시글이 존재하지 않습니다.");
-      error.statusCode = 404;
-      throw error;
+      throw ERRORS.notFound("게시글이 존재하지 않습니다.");
     }
 
     // 댓글 데이터
@@ -85,9 +84,7 @@ const updatePost = async (req, res, next) => {
     // 권한 확인
     const isValidId = await confirmAuth(userId, postId);
     if (!isValidId) {
-      const error = new Error("권한이 없습니다.");
-      error.statusCode = 401;
-      throw error;
+      throw ERRORS.unaunauthorized();
     }
 
     // 전달 데이터에 태그가 있을 시
@@ -116,9 +113,7 @@ const deletePost = async (req, res, next) => {
     // 권한 확인
     const isValidId = await confirmAuth(userId, postId);
     if (!isValidId) {
-      const error = new Error("권한이 없습니다.");
-      error.statusCode = 401;
-      throw error;
+      throw ERRORS.unaunauthorized();
     }
 
     // 태그 데이터 삭제
