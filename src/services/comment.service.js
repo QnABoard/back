@@ -6,3 +6,10 @@ export const addCommentData = async (userId, postId, content) => {
 
   await db.query(sql, [userId, postId, content]);
 };
+
+// 댓글 데이터 수정
+export const updateCommentData = async (commentId, newContent) => {
+  const sql = `UPDATE comments SET content = ? WHERE id = ?`;
+
+  await db.execute(sql, [newContent, commentId]);
+};
