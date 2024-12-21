@@ -9,7 +9,7 @@ export const addCommentData = async (userId, postId, content) => {
 
 // 댓글 데이터 수정
 export const updateCommentData = async (commentId, newContent) => {
-  const sql = `UPDATE comments SET content = ? WHERE id = ?`;
+  const sql = `UPDATE comments SET content = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
 
   await db.execute(sql, [newContent, commentId]);
 };
