@@ -4,7 +4,7 @@ import ERRORS from "../utils/errors.js";
 // 댓글 등록
 const addComment = async (req, res, next) => {
   const userId = req.user.id;
-  const postId = +req.params.id;
+  const postId = +req.params.postId;
   const { content } = req.body;
 
   try {
