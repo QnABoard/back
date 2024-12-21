@@ -20,3 +20,9 @@ export const confirmAuth = async (userId, commentId) => {
   const [result] = await db.execute(sql, [commentId]);
   return userId == result[0].user_id;
 };
+
+// 댓글 데이터 삭제
+export const deleteCommentData = async (commentId) => {
+  const sql = `DELETE FROM comments WHERE id = ?`;
+  await db.execute(sql, [commentId]);
+};
