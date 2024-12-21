@@ -6,6 +6,7 @@ import userRouter from "./routes/user.routes.js";
 import mainRouter from "./routes/main.routes.js";
 import postRouter from "./routes/post.routes.js";
 import adminRouter from "./routes/admin.routes.js";
+import commentRouter from "./routes/comment.routes.js";
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use("/api/users", userRouter);
 app.use("/api/main", mainRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/comments", commentRouter);
 
 // 에러 핸들러
 app.use(errorHandler);
