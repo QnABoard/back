@@ -18,7 +18,7 @@ const addComment = async (req, res, next) => {
     }
 
     // 댓글 등록
-    addCommentData(userId, postId, content);
+    await addCommentData(userId, postId, content);
 
     res.json({ success: true });
   } catch (err) {
