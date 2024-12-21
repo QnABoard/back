@@ -88,3 +88,11 @@ export const getPaginationDataFromLikes = async (where, param) => {
   const data = { totalCount, totalPages, limit };
   return data;
 };
+
+// 검색어별 게시글 아이디 조회
+export const getPostIdByKeyword = async (keyword) => {
+  const sql = `SELECT id FROM posts WHERE title LIKE ?`;
+
+  const [result] = await db.execute(sql, [keyword]);
+  return result.map((v) => v.id);
+};

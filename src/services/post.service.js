@@ -25,7 +25,7 @@ export const getPostDataById = async (userId, postId) => {
 export const getCommentDataById = async (id) => {
   // 댓글 아이디, 유저 아이디, 유저 닉네임, parent_id, 댓글 내용, 작성일자, 수정일자
   const sql = `SELECT 
-        c.id, u.id, u.nickname, c.parent_id, c.content, c.created_at, c.updated_at 
+        c.id, u.id AS user_id, u.nickname, c.parent_id, c.content, c.created_at, c.updated_at 
         FROM comments c 
         JOIN users u ON c.user_id = u.id
         WHERE c.post_id = ?`;
