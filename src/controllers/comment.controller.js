@@ -2,6 +2,7 @@ import {
   addCommentData,
   updateCommentData,
   confirmAuth,
+  deleteCommentData,
 } from "../services/comment.service.js";
 import ERRORS from "../utils/errors.js";
 
@@ -48,4 +49,25 @@ const updateComment = async (req, res, next) => {
   }
 };
 
-export default { addComment, updateComment };
+// 댓글 삭제
+const deleteComment = async (req, res, next) => {
+  const userId = req.user.id;
+  const commentId = +req.params.commentId;
+
+  try {
+    // 권한 확인
+    const auth = await confirmAuth(userId, commentId);
+    if (!auth) {
+      throw ERRORS.unaunauthorized();
+    }
+
+    // 댓글 삭제
+    await deleteCommentData(commentId);
+
+    res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { addComment, updateComment, deleteComment };
