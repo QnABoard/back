@@ -13,3 +13,10 @@ export const updateCommentData = async (commentId, newContent) => {
 
   await db.execute(sql, [newContent, commentId]);
 };
+
+// 댓글 권한 확인
+export const confirmAuth = async (userId, commentId) => {
+  const sql = `SELECT user_id FROM comments WHERE id = ?`;
+  const [result] = await db.execute(sql, [commentId]);
+  return userId == result[0].user_id;
+};
