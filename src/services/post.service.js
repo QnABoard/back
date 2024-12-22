@@ -99,6 +99,11 @@ export const deleteTags = async (id) => {
 
 // 게시글 삭제
 export const deletePostData = async (id) => {
-  const sql = `DELETE FROM posts WHERE id = ?`;
+  const sql = `DELETE p, c, l, pt
+FROM posts p
+LEFT JOIN comments c ON p.id = c.post_id
+LEFT JOIN likes l ON p.id = l.post_id
+LEFT JOIN post_tags pt ON p.id = pt.post_id
+WHERE p.id = ?`;
   await db.execute(sql, [id]);
 };
