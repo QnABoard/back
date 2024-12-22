@@ -74,8 +74,6 @@ export const getPaginationData = async (where, param) => {
 export const getPaginationDataFromLikes = async (where, param) => {
   let sql = `SELECT COUNT(*) AS count FROM likes`;
   if (where) sql += where;
-  console.log(sql);
-  console.log(param);
   let count;
   if (param) {
     [count] = await db.query(sql, [param]);
